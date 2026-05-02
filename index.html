@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boda de Anabella y Agustín</title>
+    <style>
+        /* VARIABLES EDITABLES - Cambia los colores aquí */
+        :root {
+            --color-fondo: #f5f5dc;    /* Beige [cite: 37, 69] */
+            --color-acento: #8fbc8f;   /* Verde Hoja [cite: 37, 69] */
+            --color-texto: #4a4a4a;
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            background-image: url('Fondo.jpeg'); /* Tu foto de fondo  */
+            background-size: cover;
+            background-attachment: fixed;
+            color: var(--color-texto);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            text-align: center;
+        }
+
+        section {
+            display: none; /* Oculta secciones [cite: 83, 84] */
+            padding: 40px 20px;
+            min-height: 90vh;
+            background: rgba(255, 255, 255, 0.85); /* Fondo blanco traslúcido para legibilidad */
+            margin: 20px;
+            border-radius: 15px;
+        }
+
+        section.activa { display: block; } /* Muestra la sección actual [cite: 84] */
+
+        .btn {
+            background-color: var(--color-acento);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #cuenta-regresiva { font-size: 1.5em; font-weight: bold; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <section id="inicio" class="activa">
+        <h1>Anabella & Agustín</h1>
+        <p>¡Nos casamos!</p>
+        <div id="countdown"></div> <br>
+        <button class="btn" onclick="navegar('confirmacion')">Confirmar Asistencia</button>
+        <button class="btn" onclick="navegar('regalo')">Regalos</button>
+        <button class="btn" onclick="navegar('musica')">Música</button>
+    </section>
+
+    <section id="confirmacion">
+        <h2>Confirmar Asistencia</h2>
+        <form id="form-boda">
+            <input type="text" name="nombre" id="input-nombre" placeholder="Tu nombre" required><br><br>
+            
+            <label>¿Asistirás?</label>
+            <select name="asiste">
+                <option value="si">Sí, ¡allí estaré!</option>
+                <option value="no">No puedo ir</option>
+            </select><br><br>
+
+            <label>Menú especial:</label>
+            <select name="menu">
+                <option value="tradicional">Tradicional</option>
+                <option value="vegano">Vegano</option>
+                <option value="vegetariano">Vegetariano</option>
+                <option value="celiaco">Celíaco</option>
+            </select><br><br>
+            
+            <input type="text" name="alergias" placeholder="¿Alguna alergia?"><br><br>
+
+            <div id="campo-pareja" style="display:none;">
+                <input type="text" name="pareja" placeholder="Nombre de tu pareja">
+            </div>
+            <div id="campo-hijos" style="display:none;">
+                <input type="number" name="hijos" placeholder="¿Cuántos hijos vienen?">
+            </div><br>
+
+            <button type="submit" class="btn">Enviar Confirmación</button>
+        </form>
+        <button class="btn" onclick="navegar('inicio')">Volver</button>
+    </section>
+
+    <section id="regalo">
+        <h2>Regalo de Bodas</h2>
+        <p>Tu presencia es nuestro mejor regalo. Si deseas ayudarnos con nuestra luna de miel:</p>
+        <p><strong>Alias:</strong> BODA.ANA.AGUS</p>
+        <p><strong>CBU:</strong> 0000003100012345678901</p>
+        <button class="btn" onclick="navegar('inicio')">Volver</button>
+    </section>
+
+    <section id="musica">
+        <h2>¿Qué música quieres escuchar?</h2>
+        <p>Escribe las canciones que no pueden faltar:</p>
+        <textarea id="sugerencia-musica" rows="4" placeholder="Ej: La Bilirrubina - Juan Luis Guerra"></textarea><br>
+        <button class="btn" onclick="navegar('inicio')">Guardar y Volver</button>
+    </section>
+
+    <script>
+        // NAVEGACIÓN [cite: 84]
+        function navegar(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('activa'));
+            document.getElementById(id).classList.add('activa');
+        }
+
+        // CUENTA REGRESIVA [cite: 29, 39, 71]
+        const fechaBoda = new Date("Sep 11, 2026 18:00:00").getTime();
+        setInterval(() => {
+            let ahora = new Date().getTime();
+            let d = fechaBoda - ahora;
+            let dias = Math.floor(d / (1000 * 60 * 60 * 24));
+            let horas = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("countdown").innerHTML = `Faltan ${dias} días y ${horas} horas`;
+        }, 1000);
+
+        // LÓGICA DE INVITADOS (URL PARAMS) [cite: 62, 64]
+        const params = new URLSearchParams(window.location.search);
+        if(params.get('p') === '1') document.getElementById('campo-pareja').style.display = 'block';
+        if(params.get('h') === '1') document.getElementById('campo-hijos').style.display = 'block';
+        if(params.get('nombre')) document.getElementById('input-nombre').value = params.get('nombre');
+    </script>
+</body>
+</html>
