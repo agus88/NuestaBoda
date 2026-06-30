@@ -3,131 +3,762 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Clicker+Script&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
     <title>Boda de Anabella y Agustín</title>
     <style>
-        /* VARIABLES EDITABLES - Cambia los colores aquí */
         :root {
-            --color-fondo: #f5f5dc;    /* Beige [cite: 37, 69] */
-            --color-acento: #8fbc8f;   /* Verde Hoja [cite: 37, 69] */
-            --color-texto: #4a4a4a;
+            --color-fondo-pagina: #fdfdf5;
+            --color-seccion: rgba(255, 255, 255, 0.95);
+            --color-acento: hsl(215, 36%, 38%); /* Verde Hoja */
+            --color-texto: hsl(0, 0%, 0%);
+            --borde-radio: 12px;
         }
 
         body {
-            background-color: var(--color-fondo);
-            background-image: url('Fondo.jpeg'); /* Tu foto de fondo  */
+            background-image: url('img/Fondo3.png');
             background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             background-attachment: fixed;
             color: var(--color-texto);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         section {
-            display: none; /* Oculta secciones [cite: 83, 84] */
-            padding: 40px 20px;
-            min-height: 90vh;
-            background: rgba(255, 255, 255, 0.85); /* Fondo blanco traslúcido para legibilidad */
-            margin: 20px;
-            border-radius: 15px;
+            display: none;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            /* background: var(--color-seccion); */
+            border-radius: 20px;
+            /* box-shadow: 0 10px 30px rgba(0,0,0,0.05); */
+            text-align: center;
         }
 
-        section.activa { display: block; } /* Muestra la sección actual [cite: 84] */
+        section.activa { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* FOTO CON ZOOM */
+        .foto-boda {
+            width: auto;
+            height: 500px;
+            border-radius: var(--borde-radio);
+            opacity: 0.8;
+            margin-bottom: 20px;
+            cursor: pointer; /* Indica que se puede cliquear */
+            transition: transform 0.3s, opacity 0.6s;
+        }
+        .foto-boda:hover { opacity: 1; transform: scale(1.02); }
+
+        /* MODAL PARA LA FOTO GRANDE */
+        #modal-foto {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        #modal-foto img { max-width: 90%; max-height: 90%; border-radius: 10px; }
+
+        /* CAMPOS Y BOTONES COHERENTES */
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: var(--borde-radio);
+            box-sizing: border-box;
+        }
 
         .btn {
+            font-family: "Kaushan Script", cursive;
+            font-weight: 400;
+            font-style: normal;
             background-color: var(--color-acento);
             color: white;
-            padding: 12px 25px;
+            padding: 8px 18px;
             border: none;
-            border-radius: 20px;
+            border-radius: 16px;
             cursor: pointer;
-            margin: 10px;
+            font-weight: bold;
+            margin: 8px;
+            font-size:20px;
+            transition: background 0.3s;
+        }
+        .btn:hover { filter: brightness(90%); }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff; /* Cambia esto por tu color de fondo */
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
         }
 
-        #cuenta-regresiva { font-size: 1.5em; font-weight: bold; margin: 20px 0; }
+        /* ESTILO PARA LINKS */
+        a {
+            color: var(--color-acento);
+            text-decoration: underline;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+        a:hover {
+            opacity: 0.7;
+        }
+
+        h1 {
+            font-family: 'Clicker Script', cursive;
+            font-weight: 400;
+            font-style: normal;
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-family: 'Clicker Script', cursive;
+            font-weight: 400;
+            font-style: normal;
+            margin-top: 0px;
+            margin-bottom: 10px;
+            color: var(--color-texto);
+        }
+
+        h2 {
+            font-family: "Kaushan Script", cursive;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        #regalo p {
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* ESTILOS PARA EL BUSCADOR DE MÚSICA */
+        .buscador-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .dropdown-resultados {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: var(--borde-radio);
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .resultado-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+            transition: background 0.2s;
+        }
+
+        .resultado-item:last-child {
+            border-bottom: none;
+        }
+
+        .resultado-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .resultado-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .resultado-info {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .resultado-titulo {
+            font-weight: bold;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .resultado-artista {
+            font-size: 12px;
+            color: #777;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ESTILOS PARA LOS GLOBOS (TAGS) */
+        .contenedor-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .tag-cancion {
+            background-color: var(--color-acento);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            animation: fadeIn 0.3s;
+        }
+
+        .btn-eliminar-tag {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-eliminar-tag:hover {
+            background: rgba(255, 255, 255, 0.6);
+            color: #333;
+        }
+
+        #countdown {
+            display: grid;
+            grid-template-columns: repeat(4, auto);
+            gap: 6px;
+            justify-content: center;
+            align-items: stretch;
+            margin: 8px auto;
+            width: auto;
+        }
+
+        .countdown-item {
+            min-width: 70px;
+            padding: 10px 8px;
+            border-radius: 18px;
+            /* background: rgba(255, 255, 255, 0.92); */
+            /* box-shadow: 0 10px 24px rgba(0,0,0,0.08); */
+            text-align: center;
+        }
+
+        .countdown-value {
+            font-family: "Kaushan Script", cursive;
+            font-weight: 200;
+            font-style: normal;
+            font-size: 3rem;
+            line-height: 1;
+            letter-spacing: -0.09em;
+            color: var(--color-acento); 
+            /* color: var(--color-texto); */
+        }
+
+        .countdown-label {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        
+
     </style>
 </head>
 <body>
+    <div id="loader">Cargando...</div>
+    <div id="modal-foto" onclick="cerrarZoom()">
+        <img src="img/Fondo3.png" alt="Foto ampliada">
+    </div>
 
     <section id="inicio" class="activa">
-        <h1>Anabella & Agustín</h1>
-        <p>¡Nos casamos!</p>
-        <div id="countdown"></div> <br>
-        <button class="btn" onclick="navegar('confirmacion')">Confirmar Asistencia</button>
-        <button class="btn" onclick="navegar('regalo')">Regalos</button>
-        <button class="btn" onclick="navegar('musica')">Música</button>
+        <p style="font-size:60px">¡Nos casamos!</p>
+        <h1 style="font-size:80px">Anabella & Agustín</h1>
+        <img id="foto-principal" src="img/Foto1.jpeg" alt="Nosotros" class="foto-boda" onclick="abrirZoom()">
+        <div id="countdown"></div>
+        <div>
+            <button class="btn" onclick="navegar('detalles-boda')">Fiesta</button>
+            <button class="btn" onclick="navegar('confirmacion')">Confirmar Asistencia</button>
+        </div>
+        <div>
+            <button class="btn" onclick="navegar('regalo')">Regalos</button>
+            <button class="btn" onclick="navegar('musica')">Música</button>
+        </div>
     </section>
 
     <section id="confirmacion">
-        <h2>Confirmar Asistencia</h2>
+        <h2 style="font-size:40px">Esperamos compartir esta noche inolvidable junto a ustedes</h2>
         <form id="form-boda">
-            <input type="text" name="nombre" id="input-nombre" placeholder="Tu nombre" required><br><br>
+            <input type="text" name="nombre" id="input-nombre" placeholder="Tu nombre completo" required>
             
-            <label>¿Asistirás?</label>
-            <select name="asiste">
-                <option value="si">Sí, ¡allí estaré!</option>
-                <option value="no">No puedo ir</option>
-            </select><br><br>
+            <select name="asiste" required>
+                <option value="" disabled selected>Solo falta saber algo...¿Venís o te lo cuentan?</option>
+                <option value="Sí">🥳Obvio, que allí estaré!</option>
+                <option value="No">😭Lamentablemente, me lo cuentan </option>
+            </select>
 
-            <label>Menú especial:</label>
-            <select name="menu">
-                <option value="tradicional">Tradicional</option>
-                <option value="vegano">Vegano</option>
-                <option value="vegetariano">Vegetariano</option>
-                <option value="celiaco">Celíaco</option>
-            </select><br><br>
+            <select name="menu" required>
+                <option value="" disabled selected>Tipo de Menú</option>
+                <option value="Sin restricciones">Sin restricciones</option>
+                <option value="Vegetariano">Vegetariano</option>
+                <option value="Celíaco">Celíaco</option>
+            </select>
             
-            <input type="text" name="alergias" placeholder="¿Alguna alergia?"><br><br>
+            <input type="text" name="alergias" placeholder="Alergias o restricciones">
 
-            <div id="campo-pareja" style="display:none;">
-                <input type="text" name="pareja" placeholder="Nombre de tu pareja">
+            <div id="contenedor-pareja" style="display: flex; align-items: center; gap: 10px; margin: 15px 0; padding: 10px; border: 1px solid #eee; border-radius: 10px;">
+                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; white-space: nowrap;">
+                    <input type="checkbox" id="check-pareja" onclick="togglePareja()" style="width: auto; margin: 0;">
+                    ¿Venís acompañado?
+                </label>
+                <input type="text" id="input-pareja" name="pareja" placeholder="Nombre Completo de tu pareja" style="display: none; flex-grow: 1; padding: 8px;">
             </div>
-            <div id="campo-hijos" style="display:none;">
-                <input type="number" name="hijos" placeholder="¿Cuántos hijos vienen?">
-            </div><br>
 
-            <button type="submit" class="btn">Enviar Confirmación</button>
+            <div id="contenedor-hijos" style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0; padding: 10px; border: 1px solid #eee; border-radius: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; white-space: nowrap;">
+                        <input type="checkbox" id="check-hijos" onclick="toggleHijos()" style="width: auto; margin: 0;">
+                        ¿Venís con hijos?
+                    </label>
+                    <input type="number" id="input-hijos" name="hijos" placeholder="¿Cuántos?" style="display: none; flex-grow: 1; padding: 8px;" min="1" oninput="generarInputsHijos()">
+                </div>
+                <div id="lista-nombres-hijos" style="display: flex; flex-direction: column; gap: 5px;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                <button type="submit" class="btn">Enviar Confirmación</button>
+                <button type="button" class="btn" onclick="navegar('inicio')">Volver</button>
+            </div>
         </form>
+    </section>
+
+    <section id="detalles-boda">
+        <p style="font-size:40px"><strong>Fecha:</strong> Domingo 11 de octubre del 2026</p>
+        <p style="font-size:40px"><strong>Horario:</strong> 18:30 hs a 03:30 hs</p>
+        <p style="font-size:40px"><strong>Lugar:</strong> Zabala Paz</p>
+        <p style="font-size:40px"><strong>Vestimenta:</strong> Elegante</p>
+        <div style="margin: 20px 0;">
+                        <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.4534720163354!2d-58.53051012425838!3d-34.66224397293319!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcc89573887c9b%3A0xc3c52e4f0c406856!2sAv.%20Gral.%20Paz%2012585%2C%20B1752%20Lomas%20del%20Mirador%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1715870000000!5m2!1ses-419!2sar" width="100%" height="250" style="border:0; border-radius: var(--borde-radio);" allowfullscreen="" loading="lazy"></iframe>-->
+        </div>
+        <p style="font-size:35px; margin: 0; line-height: 1.3;">
+            <strong>Dirección:</strong> Av. Gral. Paz 12585,<br>
+            Lomas del Mirador, Pcia de Bs. As.
+        </p>
+        <p style="font-size:40px"><a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Casamiento+de+Anabella+y+Agustín&dates=20261011T180000Z/20261012T030000Z&details=¡Los+esperamos+para+celebrar+nuestra+unión!&location=Av.+Gral.+Paz+12585,+B1752+Lomas+del+Mirador,+Provincia+de+Buenos+Aires" target="_blank">Añadir al calendario</a></p>
         <button class="btn" onclick="navegar('inicio')">Volver</button>
     </section>
 
     <section id="regalo">
-        <h2>Regalo de Bodas</h2>
-        <p>Tu presencia es nuestro mejor regalo. Si deseas ayudarnos con nuestra luna de miel:</p>
-        <p><strong>Alias:</strong> BODA.ANA.AGUS</p>
-        <p><strong>CBU:</strong> 0000003100012345678901</p>
+        <h2 style="font-size:40px">Regalo de Casamiento</h2>
+        <h2 style="font-size:30px">No seas rata y danos una ayuda!:</h2>
+        <p style="font-size:30px"><strong>Alias:</strong> DEPOSITA.ACA.RATA</p>
+        <p style="font-size:30px"><strong>CBU:</strong> 0000000000000000000000</p>
         <button class="btn" onclick="navegar('inicio')">Volver</button>
     </section>
 
     <section id="musica">
-        <h2>¿Qué música quieres escuchar?</h2>
-        <p>Escribe las canciones que no pueden faltar:</p>
-        <textarea id="sugerencia-musica" rows="4" placeholder="Ej: La Bilirrubina - Juan Luis Guerra"></textarea><br>
-        <button class="btn" onclick="navegar('inicio')">Guardar y Volver</button>
+        <h2 style="font-size:40px">¿Qué música suena?</h2>
+        <p style="font-size:40px; margin-bottom: 15px;">Para que la fiesta sea genial sugerimos canciones que no puedan faltar</p>
+        
+        <div class="buscador-container">
+            <input type="text" id="buscador-musica" placeholder="Escribe una canción o artista..." autocomplete="off">
+            <div id="resultados-busqueda" class="dropdown-resultados"></div>
+        </div>
+
+        <div id="contenedor-canciones" class="contenedor-tags">
+            </div>
+
+        <button class="btn" onclick="guardarMusica()">Guardar</button>
+        <button class="btn" onclick="navegar('inicio')">Volver</button>
     </section>
 
     <script>
-        // NAVEGACIÓN [cite: 84]
         function navegar(id) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('activa'));
             document.getElementById(id).classList.add('activa');
         }
 
-        // CUENTA REGRESIVA [cite: 29, 39, 71]
-        const fechaBoda = new Date("Sep 11, 2026 18:00:00").getTime();
-        setInterval(() => {
-            let ahora = new Date().getTime();
-            let d = fechaBoda - ahora;
-            let dias = Math.floor(d / (1000 * 60 * 60 * 24));
-            let horas = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("countdown").innerHTML = `Faltan ${dias} días y ${horas} horas`;
-        }, 1000);
+        // FUNCIONES DE ZOOM
+        function abrirZoom() { 
+            const imgActual = document.getElementById('foto-principal');
+            document.querySelector('#modal-foto img').src = imgActual.src;
+            document.getElementById('modal-foto').style.display = 'flex'; 
+        }
+        function cerrarZoom() { document.getElementById('modal-foto').style.display = 'none'; }
 
-        // LÓGICA DE INVITADOS (URL PARAMS) [cite: 62, 64]
-        const params = new URLSearchParams(window.location.search);
-        if(params.get('p') === '1') document.getElementById('campo-pareja').style.display = 'block';
-        if(params.get('h') === '1') document.getElementById('campo-hijos').style.display = 'block';
-        if(params.get('nombre')) document.getElementById('input-nombre').value = params.get('nombre');
+        function togglePareja() {
+            var checkBox = document.getElementById("check-pareja");
+            var input = document.getElementById("input-pareja");
+            input.style.display = checkBox.checked ? "block" : "none";
+            if (!checkBox.checked) input.value = "";
+        }
+        // Lógica para HIJOS
+        function toggleHijos() {
+            var checkBox = document.getElementById("check-hijos");
+            var input = document.getElementById("input-hijos");
+            var lista = document.getElementById("lista-nombres-hijos");
+            input.style.display = checkBox.checked ? "block" : "none";
+            if (!checkBox.checked) {
+                input.value = "";
+                lista.innerHTML = "";
+            }
+        }
+
+        function generarInputsHijos() {
+            const cant = parseInt(document.getElementById('input-hijos').value) || 0;
+            const container = document.getElementById('lista-nombres-hijos');
+            const inputsExistentes = container.querySelectorAll('input');
+            
+            if (cant > inputsExistentes.length) {
+                for (let i = inputsExistentes.length + 1; i <= cant; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.placeholder = 'Nombre completo hijo ' + i;
+                    input.required = true;
+                    input.className = "nombre-hijo";
+                    container.appendChild(input);
+                }
+            } else if (cant < inputsExistentes.length) {
+                for (let i = inputsExistentes.length; i > cant; i--) {
+                    container.removeChild(inputsExistentes[i-1]);
+                }
+            }
+        }
+
+        // 1. Ocultar el loader cuando todo cargó
+        window.addEventListener('load', function() {
+            document.getElementById('loader').style.display = 'none';
+        });
+
+        // 2. Función del Countdown (Corregida para Google Apps Script)
+        function actualizarCuenta() {
+            const fechaBoda = new Date("Oct 11, 2026 18:00:00").getTime();
+            let now = new Date().getTime();
+            let distance = fechaBoda - now;
+
+            let totalDays = Math.floor(distance / (1000 * 60 * 60 * 24));
+            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            let d = String(totalDays).padStart(2, '0');
+            let h = String(hours).padStart(2, '0');
+            let m = String(minutes).padStart(2, '0');
+            let s = String(seconds).padStart(2, '0');
+            
+            // CORRECCIÓN: Concatenación clásica
+            document.getElementById("countdown").innerHTML = 
+                '<div class="countdown-item"><div class="countdown-value">' + d + '</div><div class="countdown-label">días</div></div>' +
+                '<div class="countdown-item"><div class="countdown-value">' + h + '</div><div class="countdown-label">horas</div></div>' +
+                '<div class="countdown-item"><div class="countdown-value">' + m + '</div><div class="countdown-label">minutos</div></div>' +
+                '<div class="countdown-item"><div class="countdown-value">' + s + '</div><div class="countdown-label">segundos</div></div>';
+        }
+
+        // Ejecutar una vez al arrancar para que no haya delay
+        actualizarCuenta(); 
+        // Luego actualizar cada segundo
+        setInterval(actualizarCuenta, 1000);
+
+        // Lógica de Rotación de Fotos
+        const fotos = [
+            "img/Foto1.jpeg", 
+            "img/Foto2.jpeg", 
+            "img/Foto3.jpeg", 
+            "img/Foto4.jpeg", 
+            "img/Foto5.jpeg"
+        ];
+        let indexFoto = 0;
+
+        function CambiarFoto() {
+            const img = document.getElementById('foto-principal');
+            img.style.opacity = 0; // Inicia desvanecimiento de salida
+            setTimeout(() => {
+                indexFoto = (indexFoto + 1) % fotos.length;
+                img.src = fotos[indexFoto];
+                img.style.opacity = 0.8; // Desvanecimiento de entrada (vuelve a 0.8)
+            }, 600); // Tiempo sincronizado con la transición CSS
+        }
+        
+        // Cambiar la foto cada 60 segundos
+        setInterval(CambiarFoto, 6000);
+
+        // PARÁMETROS URL
+        function procesarDatosURL() {
+            const params = new URLSearchParams(window.location.search);
+
+            // 1. Nombre
+            if(params.get('nombre')) {
+                document.getElementById('input-nombre').value = params.get('nombre');
+            }
+
+            // 2. Pareja (p=1)
+            if(params.get('p') === '1') {
+                const check = document.getElementById('check-pareja');
+                check.checked = false;
+                togglePareja(); // Esto muestra el campo de texto
+            }else{
+                document.getElementById('contenedor-pareja').style.display = "none";
+            }
+
+            // 3. Hijos (h=1)
+            if(params.get('h') === '1') {
+                const check = document.getElementById('check-hijos');
+                check.checked = false;
+                toggleHijos(); // Esto muestra el campo de número
+            }else{
+                document.getElementById('contenedor-hijos').style.display = "none";
+            }
+
+            // 4. LIMPIAR URL: Esto elimina los parámetros de la barra de direcciones
+            // sin recargar la página.
+            //window.history.replaceState(null, null, window.location.pathname);
+        }
+        // --- LÓGICA DEL BUSCADOR DE MÚSICA ---
+        let timeoutBusqueda;
+        let cancionesElegidas = []; // Aquí se guardan las canciones que elige el usuario
+
+        const inputBuscador = document.getElementById('buscador-musica');
+        const contenedorResultados = document.getElementById('resultados-busqueda');
+        const contenedorTags = document.getElementById('contenedor-canciones');
+
+        // Escuchar cuando el usuario escribe
+        inputBuscador.addEventListener('input', function() {
+            clearTimeout(timeoutBusqueda);
+            const query = this.value.trim();
+
+            if (query.length < 3) {
+                contenedorResultados.style.display = 'none';
+                return;
+            }
+
+            // Esperar medio segundo para no saturar la API mientras el usuario teclea
+            timeoutBusqueda = setTimeout(() => buscarCanciones(query), 500);
+        });
+
+        // Ocultar resultados si se hace clic fuera
+        document.addEventListener('click', function(e) {
+            if (!document.querySelector('.buscador-container').contains(e.target)) {
+                contenedorResultados.style.display = 'none';
+            }
+        });
+
+        // Buscar en la API de iTunes
+        function buscarCanciones(query) {
+            const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=5`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => mostrarResultados(data.results))
+                .catch(error => console.error('Error buscando música:', error));
+        }
+
+        // Mostrar opciones en el "combobox"
+       function mostrarResultados(canciones) {
+            contenedorResultados.innerHTML = '';
+            
+            if (canciones.length === 0) {
+                contenedorResultados.innerHTML = '<div class="resultado-item">No se encontraron canciones.</div>';
+            } else {
+                canciones.forEach(cancion => {
+                    const div = document.createElement('div');
+                    div.className = 'resultado-item';
+                    
+                    const nombreCancion = cancion.trackName;
+                    const nombreArtista = cancion.artistName;
+                    const imagen = cancion.artworkUrl60; // Portada del disco
+
+                    // CORRECCIÓN: Concatenación clásica para evitar el error de Apps Script
+                    div.innerHTML = '<img src="' + imagen + '" alt="Portada">' +
+                                    '<div class="resultado-info">' +
+                                        '<span class="resultado-titulo">' + nombreCancion + '</span>' +
+                                        '<span class="resultado-artista">' + nombreArtista + '</span>' +
+                                    '</div>';
+                    
+                    div.onclick = () => seleccionarCancion(nombreCancion, nombreArtista);
+                    contenedorResultados.appendChild(div);
+                });
+            }
+            contenedorResultados.style.display = 'block';
+        }
+
+        // Agregar canción a los globos
+        function seleccionarCancion(titulo, artista) {
+            // Evitar duplicados revisando si ya existe ese título y artista
+            const existe = cancionesElegidas.find(c => c.cancion === titulo && c.artista === artista);
+            
+            if (!existe) {
+                cancionesElegidas.push({ cancion: titulo, artista: artista });
+                actualizarGlobos();
+            }
+
+            inputBuscador.value = '';
+            contenedorResultados.style.display = 'none';
+            inputBuscador.focus();
+        }
+
+        // Actualizar la vista de los globos (tags)
+        function actualizarGlobos() {
+            contenedorTags.innerHTML = '';
+            
+            cancionesElegidas.forEach((item, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'tag-cancion';
+                
+                // CORRECCIÓN: Concatenación clásica
+                tag.innerHTML = item.cancion + ' - ' + item.artista +
+                                ' <button type="button" class="btn-eliminar-tag" onclick="eliminarCancion(' + index + ')">X</button>';
+                contenedorTags.appendChild(tag);
+            });
+        }
+
+        // Eliminar canción de los globos
+        function eliminarCancion(index) {
+            cancionesElegidas.splice(index, 1);
+            actualizarGlobos();
+        }
+
+        // Guardar música (Puedes conectar esto a tu Google Script si lo deseas)
+        function guardarMusica() {
+            if (cancionesElegidas.length === 0) {
+                alert("Por favor, selecciona al menos una canción.");
+                return;
+            }
+            
+            // USA TU MISMA URL ACTUAL DE APPS SCRIPT AQUÍ
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOkzf1Bfm3kaODGJ9XayJu-Asr_WB9vWV2ut9yqakfuUQrJjjN0SWYMBqpFD01ig_ecw/exec';
+            
+            const formData = new URLSearchParams();
+            // Identificador para el script
+            formData.append('tipo_formulario', 'musica');
+            // Convertimos el array de objetos a texto JSON
+            formData.append('datos_musica', JSON.stringify(cancionesElegidas));
+
+            const boton = document.querySelector('#musica .btn');
+            const textoOriginal = boton.textContent;
+            boton.textContent = 'Guardando...';
+            boton.disabled = true;
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            })
+            .then(() => {
+                alert("¡Música guardada! Gracias por ayudarnos con la playlist.");
+                cancionesElegidas = []; // Vaciamos la lista local
+                actualizarGlobos(); // Limpiamos los globos
+                navegar('inicio');
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert('Hubo un problema al guardar. Por favor, intenta de nuevo.');
+            })
+            .finally(() => {
+                boton.textContent = textoOriginal;
+                boton.disabled = false;
+            });
+        }
+
+        // Lógica para enviar datos a Google Apps Script
+        document.getElementById('form-boda').addEventListener('submit', function(e) {
+            e.preventDefault();
+            //const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTcy1D5aLjoR1E3-JI7Uo04ktXBo04RLB0KhBj9dDw/dev';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOkzf1Bfm3kaODGJ9XayJu-Asr_WB9vWV2ut9yqakfuUQrJjjN0SWYMBqpFD01ig_ecw/exec';
+            
+            const formData = new URLSearchParams();
+            formData.append('tipo_formulario', 'confirmacion');
+            formData.append('nombre', document.getElementById('input-nombre').value);
+            formData.append('asiste', document.querySelector('select[name="asiste"]').value);
+            formData.append('menu', document.querySelector('select[name="menu"]').value);
+            formData.append('alergias', document.querySelector('input[name="alergias"]').value.trim() || 'Ninguna');
+            
+            const tienePareja = document.getElementById('check-pareja')?.checked || false;
+            formData.append('pareja_confirmada', tienePareja ? 'Sí' : 'No');
+            formData.append('nombre_pareja', tienePareja ? (document.getElementById('input-pareja')?.value.trim() || '') : '-');
+            
+            const tieneHijos = document.getElementById('check-hijos')?.checked || false;
+            formData.append('cantidad_hijos', tieneHijos ? (document.getElementById('input-hijos')?.value || '0') : '0');
+            
+            const listaNombresHijos = tieneHijos ? 
+                Array.from(document.querySelectorAll('.nombre-hijo'))
+                    .map(input => input.value.trim())
+                    .filter(n => n !== "")
+                    .join(', ') : '-';
+            formData.append('nombres_hijos', listaNombresHijos);
+
+            // Mostrar indicador de carga
+            const boton = document.querySelector('#form-boda button[type="submit"]');
+            const textoOriginal = boton.textContent;
+            boton.textContent = 'Enviando...';
+            boton.disabled = true;
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            })
+            .then(() => {
+                alert('¡Muchas gracias! Tu confirmación ha sido enviada con éxito.');
+                document.getElementById('form-boda').reset();
+                navegar('inicio');
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert('Hubo un problema al enviar la confirmación. Por favor, intenta de nuevo.');
+            })
+            .finally(() => {
+                boton.textContent = textoOriginal;
+                boton.disabled = false;
+            });
+        });
+
+        // Ejecutar al cargar la página
+        window.onload = procesarDatosURL;
     </script>
 </body>
 </html>
