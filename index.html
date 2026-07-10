@@ -102,7 +102,7 @@
                 width: 100%;
                 margin: 0 auto;
                 min-height: 100dvh;
-                padding: clamp(56px, 14vw, 84px) clamp(10px, 4vw, 16px) clamp(36px, 10vw, 56px);
+                padding: clamp(56px, 14vw, 84px) clamp(10px, 4vw, 16px) clamp(28px, 8vw, 44px);
                 align-items: flex-start;
                 justify-content: flex-start;
             }
@@ -480,9 +480,19 @@
     </div>
 
     <script>
+        let datosUrl = {
+            nombre: '',
+            pareja: false,
+            hijos: false
+        };
+
         function navegar(id) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('activa'));
             document.getElementById(id).classList.add('activa');
+
+            if (id === 'confirmacion') {
+                aplicarEstadoConfirmacion();
+            }
         }
 
         // FUNCIONES DE ZOOM
@@ -495,19 +505,65 @@
 
         function togglePareja() {
             var checkBox = document.getElementById("check-pareja");
+            var contenedor = document.getElementById("contenedor-pareja");
             var input = document.getElementById("input-pareja");
+            contenedor.style.display = checkBox.checked ? "flex" : "none";
             input.style.display = checkBox.checked ? "block" : "none";
             if (!checkBox.checked) input.value = "";
         }
         // Lógica para HIJOS
         function toggleHijos() {
             var checkBox = document.getElementById("check-hijos");
+            var contenedor = document.getElementById("contenedor-hijos");
             var input = document.getElementById("input-hijos");
             var lista = document.getElementById("lista-nombres-hijos");
+            contenedor.style.display = checkBox.checked ? "flex" : "none";
             input.style.display = checkBox.checked ? "block" : "none";
             if (!checkBox.checked) {
                 input.value = "";
                 lista.innerHTML = "";
+            }
+        }
+
+        function aplicarEstadoConfirmacion() {
+            const inputNombre = document.getElementById('input-nombre');
+            const checkPareja = document.getElementById('check-pareja');
+            const contenedorPareja = document.getElementById('contenedor-pareja');
+            const inputPareja = document.getElementById('input-pareja');
+            const checkHijos = document.getElementById('check-hijos');
+            const contenedorHijos = document.getElementById('contenedor-hijos');
+            const inputHijos = document.getElementById('input-hijos');
+            const listaHijos = document.getElementById('lista-nombres-hijos');
+
+            if (!inputNombre || !checkPareja || !contenedorPareja || !inputPareja || !checkHijos || !contenedorHijos || !inputHijos || !listaHijos) {
+                return;
+            }
+
+            if (datosUrl.nombre) {
+                inputNombre.value = datosUrl.nombre;
+            }
+
+            if (datosUrl.pareja) {
+                checkPareja.checked = true;
+                contenedorPareja.style.display = 'flex';
+                inputPareja.style.display = 'block';
+            } else {
+                checkPareja.checked = false;
+                contenedorPareja.style.display = 'none';
+                inputPareja.style.display = 'none';
+                inputPareja.value = '';
+            }
+
+            if (datosUrl.hijos) {
+                checkHijos.checked = true;
+                contenedorHijos.style.display = 'flex';
+                inputHijos.style.display = 'block';
+            } else {
+                checkHijos.checked = false;
+                contenedorHijos.style.display = 'none';
+                inputHijos.style.display = 'none';
+                inputHijos.value = '';
+                listaHijos.innerHTML = '';
             }
         }
 
@@ -593,27 +649,14 @@
         function procesarDatosURL() {
             const params = new URLSearchParams(window.location.search);
 
-            // 1. Nombre
-            if(params.get('nombre')) {
-                document.getElementById('input-nombre').value = params.get('nombre');
-            }
+            datosUrl.nombre = params.get('nombre') || '';
+            datosUrl.pareja = params.get('p') === '1';
+            datosUrl.hijos = params.get('h') === '1';
 
-            // 2. Pareja (p=1)
-            if(params.get('p') === '1') {
-                const check = document.getElementById('check-pareja');
-                check.checked = false;
-                togglePareja(); // Esto muestra el campo de texto
-            }else{
-                document.getElementById('contenedor-pareja').style.display = "none";
-            }
-
-            // 3. Hijos (h=1)
-            if(params.get('h') === '1') {
-                const check = document.getElementById('check-hijos');
-                check.checked = false;
-                toggleHijos(); // Esto muestra el campo de número
-            }else{
-                document.getElementById('contenedor-hijos').style.display = "none";
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => aplicarEstadoConfirmacion());
+            } else {
+                aplicarEstadoConfirmacion();
             }
 
             // 4. LIMPIAR URL: elimina los parámetros de la barra de direcciones
