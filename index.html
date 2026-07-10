@@ -697,17 +697,14 @@
             datosUrl.hijos = datos.hijos || datosUrl.hijos;
             guardarDatosConfirmacion();
 
-            const aplicarYMostrar = () => {
+            const aplicarSolo = () => {
                 aplicarEstadoConfirmacion();
-                if (datos.nombre || datos.pareja || datos.hijos) {
-                    navegar('confirmacion');
-                }
             };
 
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', aplicarYMostrar);
+                document.addEventListener('DOMContentLoaded', aplicarSolo);
             } else {
-                aplicarYMostrar();
+                aplicarSolo();
             }
 
             // 4. LIMPIAR URL: elimina los parámetros de la barra de direcciones
