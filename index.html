@@ -486,12 +486,48 @@
             hijos: false
         };
 
+        function leerDatosUrl() {
+            const href = window.location.href || '';
+            const query = href.includes('?') ? href.split('?')[1].split('#')[0] : '';
+            const params = new URLSearchParams(query || window.location.search || '');
+
+            return {
+                nombre: (params.get('nombre') || '').trim(),
+                pareja: params.get('p') === '1' || params.get('pareja') === '1' || params.get('p') === 'true' || params.get('pareja') === 'true',
+                hijos: params.get('h') === '1' || params.get('hijos') === '1' || params.get('h') === 'true' || params.get('hijos') === 'true'
+            };
+        }
+
+        function guardarDatosConfirmacion() {
+            try {
+                sessionStorage.setItem('datosConfirmacion', JSON.stringify(datosUrl));
+            } catch (e) {
+                console.warn('No se pudieron guardar los datos de confirmación:', e);
+            }
+        }
+
+        function restaurarDatosConfirmacion() {
+            try {
+                const guardados = sessionStorage.getItem('datosConfirmacion');
+                if (guardados) {
+                    const datos = JSON.parse(guardados);
+                    datosUrl.nombre = datos.nombre || datosUrl.nombre;
+                    datosUrl.pareja = typeof datos.pareja === 'boolean' ? datos.pareja : datosUrl.pareja;
+                    datosUrl.hijos = typeof datos.hijos === 'boolean' ? datos.hijos : datosUrl.hijos;
+                }
+            } catch (e) {
+                console.warn('No se pudieron restaurar los datos de confirmación:', e);
+            }
+        }
+
         function navegar(id) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('activa'));
-            document.getElementById(id).classList.add('activa');
-
-            if (id === 'confirmacion') {
-                aplicarEstadoConfirmacion();
+            const seccion = document.getElementById(id);
+            if (seccion) {
+                seccion.classList.add('activa');
+                if (id === 'confirmacion') {
+                    setTimeout(() => aplicarEstadoConfirmacion(), 0);
+                }
             }
         }
 
@@ -526,6 +562,14 @@
         }
 
         function aplicarEstadoConfirmacion() {
+            restaurarDatosConfirmacion();
+
+            const datos = leerDatosUrl();
+            datosUrl.nombre = datos.nombre || datosUrl.nombre;
+            datosUrl.pareja = datos.pareja || datosUrl.pareja;
+            datosUrl.hijos = datos.hijos || datosUrl.hijos;
+            guardarDatosConfirmacion();
+
             const inputNombre = document.getElementById('input-nombre');
             const checkPareja = document.getElementById('check-pareja');
             const contenedorPareja = document.getElementById('contenedor-pareja');
@@ -647,16 +691,23 @@
 
         // PARÁMETROS URL
         function procesarDatosURL() {
-            const params = new URLSearchParams(window.location.search);
+            const datos = leerDatosUrl();
+            datosUrl.nombre = datos.nombre || datosUrl.nombre;
+            datosUrl.pareja = datos.pareja || datosUrl.pareja;
+            datosUrl.hijos = datos.hijos || datosUrl.hijos;
+            guardarDatosConfirmacion();
 
-            datosUrl.nombre = params.get('nombre') || '';
-            datosUrl.pareja = params.get('p') === '1';
-            datosUrl.hijos = params.get('h') === '1';
+            const aplicarYMostrar = () => {
+                aplicarEstadoConfirmacion();
+                if (datos.nombre || datos.pareja || datos.hijos) {
+                    navegar('confirmacion');
+                }
+            };
 
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => aplicarEstadoConfirmacion());
+                document.addEventListener('DOMContentLoaded', aplicarYMostrar);
             } else {
-                aplicarEstadoConfirmacion();
+                aplicarYMostrar();
             }
 
             // 4. LIMPIAR URL: elimina los parámetros de la barra de direcciones
