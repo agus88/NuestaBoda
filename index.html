@@ -23,42 +23,66 @@
         body {
             background-image: url('img/Fondo3.png');
             background-size: cover;
-            background-position: center;
+            background-position: center center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-attachment: scroll;
             color: var(--color-texto);
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
         }
 
         section {
             display: none;
-            padding: 20px;
-            width: 95%;
+            padding: 20px 16px 24px;
+            width: min(95%, 500px);
             max-width: 500px;
+            margin: 0 auto;
             text-align: center;
 			box-sizing: border-box;
         }
 
-        section.activa { display: block; animation: fadeIn 0.5s; }
+        section.activa {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100dvh;
+            animation: fadeIn 0.5s;
+        }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* FOTO CON ZOOM */
         .foto-boda {
-            width: 100%;
-			max-width: 400px;
-            height: auto;
+            width: min(100%, 400px);
+            max-width: 400px;
+            height: min(50dvh, 380px);
+            object-fit: cover;
+            object-position: center;
+            display: block;
             border-radius: var(--borde-radio);
             opacity: 0.8;
-            margin-bottom: 20px;
-            cursor: pointer; /* Indica que se puede cliquear */
+            margin: 0 auto 20px;
+            cursor: pointer;
             transition: transform 0.3s, opacity 0.6s;
         }
         .foto-boda:hover { opacity: 1; }
+
+        @media (max-width: 600px) {
+            section {
+                padding: 16px 12px 24px;
+                width: min(100%, 500px);
+            }
+
+            .foto-boda {
+                height: min(44dvh, 320px);
+                max-width: 320px;
+            }
+        }
 
         /* MODAL PARA LA FOTO GRANDE */
         #modal-foto {
@@ -402,7 +426,7 @@
 
     <section id="musica">
         <h2>¿Qué música suena?</h2>
-        <p class="txt-grande" style="; margin-bottom: 15px;">Para que la fiesta sea genial sugerimos canciones que no puedan faltar</p>
+        <p class="txt-grande" style="margin-bottom: 15px;">Para que la fiesta sea genial sugerimos canciones que no puedan faltar</p>
         
         <div class="buscador-container">
             <input type="text" id="buscador-musica" placeholder="Escribe una canción o artista..." autocomplete="off">
@@ -553,10 +577,19 @@
                 document.getElementById('contenedor-hijos').style.display = "none";
             }
 
-            // 4. LIMPIAR URL: Esto elimina los parámetros de la barra de direcciones
+            // 4. LIMPIAR URL: elimina los parámetros de la barra de direcciones
             // sin recargar la página.
-            //window.history.replaceState(null, null, window.location.pathname);
+            if (window.location.search) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
         }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', procesarDatosURL);
+        } else {
+            procesarDatosURL();
+        }
+
         // --- LÓGICA DEL BUSCADOR DE MÚSICA ---
         let timeoutBusqueda;
         let cancionesElegidas = []; // Aquí se guardan las canciones que elige el usuario
