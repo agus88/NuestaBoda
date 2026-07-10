@@ -61,6 +61,9 @@
             margin: 0 auto;
             text-align: center;
 			box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.82);
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
         }
 
         section.activa {
@@ -101,14 +104,21 @@
                 width: 100%;
                 margin: 0 auto;
                 min-height: 100dvh;
-                padding: clamp(44px, 10vw, 72px) clamp(12px, 4vw, 20px) clamp(28px, 8vw, 44px);
+                padding: clamp(56px, 14vw, 84px) clamp(10px, 4vw, 16px) clamp(28px, 8vw, 44px);
                 align-items: flex-start;
                 justify-content: flex-start;
             }
 
             section {
-                padding: 20px 12px 20px;
+                padding: 20px 14px 24px;
                 width: min(100%, 500px);
+                background: rgba(255, 255, 255, 0.88);
+                border-radius: 16px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            }
+
+            section.activa {
+                padding-top: clamp(28px, 8vw, 44px);
             }
 
             .foto-boda {
