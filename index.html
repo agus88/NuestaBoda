@@ -489,12 +489,12 @@
         <h2 class="KaushanScript">Esperamos compartir esta noche inolvidable junto a ustedes</h2>
         <form id="form-boda">
             <input type="text" name="nombre" id="input-nombre" placeholder="Tu nombre completo" required>
-            <div id="contenedor-pareja" style="display: flex; align-items: center; gap: 10px; margin: 15px 0; padding: 10px; border: 1px solid #eee; border-radius: 10px;">
+            <div id="contenedor-pareja" style="display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin: 15px 0; padding: 10px; border: 1px solid #eee; border-radius: 10px;">
                 <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; white-space: nowrap;">
                     <input type="checkbox" id="check-pareja" onclick="togglePareja()" style="width: auto; margin: 0;">
                     ¿Venís acompañado?
                 </label>
-                <input type="text" id="input-pareja" name="pareja" placeholder="Nombre Completo de tu pareja" style="display: none; flex-grow: 1; padding: 8px;">
+                <input type="text" id="input-pareja" name="pareja" placeholder="Nombre Completo de tu pareja" style="display: none; width: 100%; padding: 8px;">
             </div>
 
             <div id="contenedor-hijos" style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0; padding: 10px; border: 1px solid #eee; border-radius: 10px;">
@@ -734,7 +734,7 @@
                 for (let i = inputsExistentes.length + 1; i <= cant; i++) {
                     const input = document.createElement('input');
                     input.type = 'text';
-                    input.placeholder = 'Nombre completo hijo ' + i;
+                    input.placeholder = 'Nombre completo';
                     input.required = true;
                     input.className = "nombre-hijo";
                     container.appendChild(input);
