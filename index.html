@@ -489,12 +489,24 @@
         <h2 class="KaushanScript">Esperamos compartir esta noche inolvidable junto a ustedes</h2>
         <form id="form-boda">
             <input type="text" name="nombre" id="input-nombre" placeholder="Tu nombre completo" required>
+            <select name="menu" required>
+                <option value="" disabled selected>Tipo de Menú</option>
+                <option value="Sin restricciones">Sin restricciones</option>
+                <option value="Vegetariano">Vegetariano</option>
+                <option value="Celíaco">Celíaco</option>
+            </select>
             <div id="contenedor-pareja" style="display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin: 15px 0; padding: 10px; border: 1px solid #eee; border-radius: 10px;">
                 <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; white-space: nowrap;">
                     <input type="checkbox" id="check-pareja" onclick="togglePareja()" style="width: auto; margin: 0;">
                     ¿Venís acompañado?
                 </label>
                 <input type="text" id="input-pareja" name="pareja" placeholder="Nombre Completo de tu pareja" style="display: none; width: 100%; padding: 8px;">
+                <select id="menu-pareja" name="menuPareja" style="display: none;" required>
+                    <option value="" disabled selected>Tipo de Menú</option>
+                    <option value="Sin restricciones">Sin restricciones</option>
+                    <option value="Vegetariano">Vegetariano</option>
+                    <option value="Celíaco">Celíaco</option>
+                </select>
             </div>
 
             <div id="contenedor-hijos" style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0; padding: 10px; border: 1px solid #eee; border-radius: 10px;">
@@ -513,12 +525,6 @@
                 <option value="Sí">🥳 Obvio allí estaré!</option>
                 <option value="No">😭 No, me lo cuentan </option>
             </select>
-            <select name="menu" required>
-                <option value="" disabled selected>Tipo de Menú</option>
-                <option value="Sin restricciones">Sin restricciones</option>
-                <option value="Vegetariano">Vegetariano</option>
-                <option value="Celíaco">Celíaco</option>
-            </select>
             
             <input type="text" name="alergias" placeholder="Alergias o restricciones">
 
@@ -533,7 +539,6 @@
         <p class="txt-grandeFiesta emilys-candy-regular"><strong>Fecha:</strong> Domingo 11 de octubre del 2026</p>
         <p class="txt-grandeFiesta emilys-candy-regular"><strong>Horario:</strong> 18:00 hs a 03:00 hs</p>
         <p class="txt-grandeFiesta emilys-candy-regular"><strong>Lugar:</strong> Zabala Paz</p>
-        <p class="txt-grandeFiesta emilys-candy-regular"><strong>Vestimenta:</strong> Elegante</p>
         <div style="margin: 20px 0;">
 			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.4534720163354!2d-58.53051012425838!3d-34.66224397293319!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcc89573887c9b%3A0xc3c52e4f0c406856!2sAv.%20Gral.%20Paz%2012585%2C%20B1752%20Lomas%20del%20Mirador%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1715870000000!5m2!1ses-419!2sar" width="100%" height="250" style="border:0; border-radius: var(--borde-radio);" allowfullscreen="" loading="lazy"></iframe>
         </div>
@@ -548,7 +553,7 @@
     </section>
 
     <section id="regalo">
-        <h2 class="SegoeUI">
+        <h2 class="emilys-candy-regular">
             Tu presencia en nuestro casamiento será el mejor regalo. ❤️
             <br>
             Como ya tenemos amor, risas y electrodomésticos, si querés hacernos un presente podés sumar tu aporte a nuestro fondo de supervivencia matrimonial.
@@ -571,7 +576,7 @@
                 <br>
             </h2>
             <p class="txt-grande emilys-candy-regular" style="margin-bottom: 15px;">
-                Para que la fiesta sea genial sugerimos canciones que no puedan faltar
+                Para que la fiesta sea genial sugerinos canciones que no puedan faltar
             </p>
             
             <div class="buscador-container">
@@ -603,6 +608,7 @@
             return {
                 nombre: (params.get('nombre') || '').trim(),
                 pareja: params.get('p') === '1' || params.get('pareja') === '1' || params.get('p') === 'true' || params.get('pareja') === 'true',
+                NomPareja: (params.get('np') || params.get('nombrePareja') || '').trim(),
                 hijos: params.get('h') === '1' || params.get('hijos') === '1' || params.get('h') === 'true' || params.get('hijos') === 'true'
             };
         }
@@ -659,7 +665,9 @@
             var checkBox = document.getElementById("check-pareja");
             var contenedor = document.getElementById("contenedor-pareja");
             var input = document.getElementById("input-pareja");
+            var Menu = document.getElementById("menu-pareja");
             input.style.display = checkBox.checked ? "block" : "none";
+            Menu.style.display = checkBox.checked ? "block" : "none";
             if (!checkBox.checked) input.value = "";
         }
         
@@ -681,6 +689,7 @@
             const datos = leerDatosUrl();
             datosUrl.nombre = datos.nombre || datosUrl.nombre;
             datosUrl.pareja = datos.pareja || datosUrl.pareja;
+            datosUrl.NomPareja = datos.NomPareja || datosUrl.NomPareja;
             datosUrl.hijos = datos.hijos || datosUrl.hijos;
             guardarDatosConfirmacion();
 
@@ -702,7 +711,13 @@
             }
 
             if (datosUrl.pareja) {
-                checkPareja.checked = false;
+                if (datosUrl.NomPareja) {
+                    inputPareja.value = datosUrl.NomPareja;
+                    checkPareja.checked = true;
+                } else {
+                    inputPareja.value = '';
+                    checkPareja.checked = false;
+                }
                 contenedorPareja.style.display = 'flex';
                 togglePareja()
             } else {
@@ -963,7 +978,8 @@
 
         document.getElementById('form-boda').addEventListener('submit', function(e) {
             e.preventDefault();
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOkzf1Bfm3kaODGJ9XayJu-Asr_WB9vWV2ut9yqakfuUQrJjjN0SWYMBqpFD01ig_ecw/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrps6gAOS-EEPI7_eN7UY3_gT5s-8hSOwtTJtAjB9jr4-pxFRD_Uc_qg_MUeKXRq_3YQ/exec'
+            // const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOkzf1Bfm3kaODGJ9XayJu-Asr_WB9vWV2ut9yqakfuUQrJjjN0SWYMBqpFD01ig_ecw/exec';
             
             const formData = new URLSearchParams();
             formData.append('tipo_formulario', 'confirmacion');
@@ -975,6 +991,7 @@
             const tienePareja = document.getElementById('check-pareja')?.checked || false;
             formData.append('pareja_confirmada', tienePareja ? 'Sí' : 'No');
             formData.append('nombre_pareja', tienePareja ? (document.getElementById('input-pareja')?.value.trim() || '') : '-');
+            formData.append('menu_pareja', tienePareja ? document.querySelector('select[name="menuPareja"]').value : '-');
             
             const tieneHijos = document.getElementById('check-hijos')?.checked || false;
             formData.append('cantidad_hijos', tieneHijos ? (document.getElementById('input-hijos')?.value || '0') : '0');
@@ -985,7 +1002,7 @@
                     .filter(n => n !== "")
                     .join(', ') : '-';
             formData.append('nombres_hijos', listaNombresHijos);
-
+            
             const boton = document.querySelector('#form-boda button[type="submit"]');
             const textoOriginal = boton.textContent;
             boton.textContent = 'Enviando...';
