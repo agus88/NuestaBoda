@@ -561,22 +561,22 @@
             Te dejamos nuestro CBU.
         </h2>
         <p><br></p>
-        <p class="txt-mediano SegoeUI"><strong>CBU en Pesos:</strong> 0000000000000000000000</p>
-        <p class="txt-mediano SegoeUI"><strong>Alias:</strong> esto.es.prueba</p>
+        <p class="txt-mediano SegoeUI"><strong>CBU en Pesos:</strong> 0150541201000124020464</p>
+        <p class="txt-mediano SegoeUI"><strong>Alias:</strong> Agus.Ana.pesos</p>
         <p class="txt-chico"><br></p>
-        <p class="txt-mediano SegoeUI"><strong>CBU en Dólares:</strong> 0000000000000000000000</p>
-        <p class="txt-mediano SegoeUI"><strong>Alias:</strong> esto.es.prueba.2</p>
+        <p class="txt-mediano SegoeUI"><strong>CBU en Dólares:</strong> 0150541211000108851494</p>
+        <p class="txt-mediano SegoeUI"><strong>Alias:</strong> Agus.Ana.Dolares</p>
         <button class="btn snowburst-one-regular" onclick="navegar('inicio')">Volver</button>
     </section>
 
         <section id="musica">
-            <h2 class="KaushanScript">
-                ¿Qué música suena?
+            <h2 class="KaushanScript txt-grande">
+                ¿Qué canciones no pueden faltar?
                 <br>
                 <br>
             </h2>
             <p class="txt-grande emilys-candy-regular" style="margin-bottom: 15px;">
-                Para que la fiesta sea genial sugerinos canciones que no puedan faltar
+                ¡Queremos saber cuáles son esos temas que tienen que sonar sí o sí para que la fiesta sea inolvidable!
             </p>
             
             <div class="buscador-container">
@@ -708,6 +708,9 @@
 
             if (datosUrl.nombre) {
                 inputNombre.value = datosUrl.nombre;
+                inputNombre.readOnly = true;
+            } else {
+                inputNombre.readOnly = false;
             }
 
             if (datosUrl.pareja) {
