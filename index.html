@@ -501,7 +501,7 @@
                     ¿Venís acompañado?
                 </label>
                 <input type="text" id="input-pareja" name="pareja" placeholder="Nombre Completo de tu pareja" style="display: none; width: 100%; padding: 8px;">
-                <select id="menu-pareja" name="menuPareja" style="display: none;" required>
+                <select id="menu-pareja" name="menuPareja" style="display: none;">
                     <option value="" disabled selected>Tipo de Menú</option>
                     <option value="Sin restricciones">Sin restricciones</option>
                     <option value="Vegetariano">Vegetariano</option>
@@ -668,7 +668,15 @@
             var Menu = document.getElementById("menu-pareja");
             input.style.display = checkBox.checked ? "block" : "none";
             Menu.style.display = checkBox.checked ? "block" : "none";
-            if (!checkBox.checked) input.value = "";
+            if (checkBox.checked) {
+                // Si viene con pareja, el menú pasa a ser obligatorio
+                Menu.required = true;
+            } else {
+                // Si se desmarca, deja de ser obligatorio y limpiamos los campos
+                Menu.required = false;
+                input.value = "";
+                Menu.value = ""; 
+            }
         }
         
         function toggleHijos() {
