@@ -947,8 +947,9 @@
                 return;
             }
             
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOkzf1Bfm3kaODGJ9XayJu-Asr_WB9vWV2ut9yqakfuUQrJjjN0SWYMBqpFD01ig_ecw/exec';
-            
+            //const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOkzf1Bfm3kaODGJ9XayJu-Asr_WB9vWV2ut9yqakfuUQrJjjN0SWYMBqpFD01ig_ecw/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrps6gAOS-EEPI7_eN7UY3_gT5s-8hSOwtTJtAjB9jr4-pxFRD_Uc_qg_MUeKXRq_3YQ/exec';
+			
             const formData = new URLSearchParams();
             formData.append('tipo_formulario', 'musica');
             formData.append('datos_musica', JSON.stringify(cancionesElegidas));
@@ -981,7 +982,7 @@
 
         document.getElementById('form-boda').addEventListener('submit', function(e) {
             e.preventDefault();
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrps6gAOS-EEPI7_eN7UY3_gT5s-8hSOwtTJtAjB9jr4-pxFRD_Uc_qg_MUeKXRq_3YQ/exec'
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrps6gAOS-EEPI7_eN7UY3_gT5s-8hSOwtTJtAjB9jr4-pxFRD_Uc_qg_MUeKXRq_3YQ/exec';
             // const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOkzf1Bfm3kaODGJ9XayJu-Asr_WB9vWV2ut9yqakfuUQrJjjN0SWYMBqpFD01ig_ecw/exec';
             
             const formData = new URLSearchParams();
