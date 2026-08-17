@@ -530,7 +530,7 @@
 
             <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                 <button type="submit" class="btn snowburst-one-regular">Enviar Confirmación</button>
-                <button type="button" class="btn snowburst-one-regular" onclick="navegar('inicio')">Volver</button>
+                <button type="button" class="btn snowburst-one-regular" onclick="advertirSalida()">Volver</button>
             </div>
         </form>
     </section>
@@ -599,7 +599,7 @@
             pareja: false,
             hijos: false
         };
-
+        let confirmacionEnviada = false;
         function leerDatosUrl() {
             const href = window.location.href || '';
             const query = href.includes('?') ? href.split('?')[1].split('#')[0] : '';
@@ -1026,6 +1026,7 @@
                 mode: 'no-cors'
             })
             .then(() => {
+                confirmacionEnviada = true;
                 alert('¡Muchas gracias! Tu confirmación ha sido enviada con éxito.');
                 document.getElementById('form-boda').reset();
                 navegar('inicio');
@@ -1039,7 +1040,20 @@
                 boton.disabled = false;
             });
         });
-
+        function advertirSalida() {
+            if (confirmacionEnviada === true) {
+                navegar('inicio');
+                return; // Cortamos la función acá para que no siga leyendo hacia abajo
+            }
+            // Esto hace saltar el cartelito de advertencia del navegador
+            const confirmacion = confirm("¿Estás seguro de que querés salir? Los datos de tu confirmación de asistencia no se enviarán.");
+            
+            // Si el usuario toca "Aceptar", la variable confirmacion es verdadera y lo llevamos al inicio
+            if (confirmacion) {
+                navegar('inicio');
+            }
+            // Si toca "Cancelar", no hacemos nada y se queda en el formulario
+        }
         window.onload = procesarDatosURL;
     </script>
 </body>
